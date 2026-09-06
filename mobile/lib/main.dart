@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'core/theme/app_theme.dart';
+import 'features/dashboard/presentation/dashboard_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Finance Tracker',
       theme: AppTheme.lightTheme,
-      home: const PlaceholderHome(),
+      home: const DashboardScreen(),
     );
   }
 }
