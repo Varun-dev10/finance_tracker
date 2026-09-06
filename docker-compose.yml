@@ -37,9 +37,37 @@ services:
       postgres:
         condition: service_healthy
 
+  airflow:
+    image: apache/airflow:2.10.5-python3.12
+    container_name: finance_tracker_airflow
+    restart: unless-stopped
+    environment:
+      AIRFLOW__CORE__EXECUTOR: SequentialExecutor
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./analytics:/opt/airflow/analytics
+      - ./backend:/opt/airflow/backend
+    ports:
+      - "8080:8080"
+
+      # apache/airflow image, it already has Python + Airflow built in
+      # just not sqlalchemy/psycopg2/duckdb (our custom packages) available to import > Install them at container startup
+      # installs the same libraries our extraction script needs, directly in the Airflow container, before starting it
+    command: >
+      bash -c "pip install --no-cache-dir duckdb==1.5.5 python-dotenv==1.0.0 psycopg2-binary==2.9.10 &&
+               airflow db init &&
+               airflow users create --username admin --password admin --firstname A --lastname D --role Admin --email admin@example.com &&
+               (airflow scheduler &) &&
+               airflow webserver"
+
 volumes:
   postgres_data:
 
 
 
-    
