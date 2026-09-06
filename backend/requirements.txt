@@ -3,4 +3,5 @@ uvicorn[standard]==0.24.0
 python-dotenv==1.0.0
 sqlalchemy==2.0.35
 psycopg2-binary==2.9.10
-alembic==1.13.1
+alembic==1.13.1          # translator python to sql
+passlib[bcrypt]==1.7.4   # password hashing
