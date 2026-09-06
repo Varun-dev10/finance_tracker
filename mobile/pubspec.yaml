@@ -34,6 +34,13 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  flutter_riverpod: ^2.5.1          # state management (holds app data like "is user logged in", shares it across screens)
+  dio: ^5.4.3                       #  HTTP client (makes API calls to FastAPI backend)
+  go_router: ^14.2.0               #  navigation (handles moving between login/dashboard/transactions screens)
+  flutter_secure_storage: ^9.2.2   #   encrypted storage on the phone (saves the JWT token safely)
+  fl_chart: ^0.68.0                 # simple charting library, for the donut chart
+  iconsax: ^0.0.8                   # modern icon set (for the category icons)
+
 
 dev_dependencies:
   flutter_test:
