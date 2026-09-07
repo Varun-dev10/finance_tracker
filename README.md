@@ -28,6 +28,18 @@ data. Airflow runs a daily job that extracts transaction data into DuckDB, a lig
 analytical database optimized for fast aggregate queries - separating heavy analytics work
 from the live transactional database.
 
+
+## Screenshots
+
+<p align="center">
+  <img src="assets/screenshots/login.png" width="200" alt="Login screen" />
+  <img src="assets/screenshots/dashboard.png" width="200" alt="Dashboard" />
+  <img src="assets/screenshots/overview.png" width="200" alt="Dashboard" />
+  <img src="assets/screenshots/transactions.png" width="200" alt="Transactions" />
+  <img src="assets/screenshots/budget.png" width="200" alt="Budget" />
+
+</p>
+
 ## Technology stack
 
 | Layer | Technology |
@@ -106,25 +118,20 @@ state management library for a project this size.
 **Prerequisites:** Docker Desktop, Flutter SDK, Android device/emulator, Python (for local scripts).
 
 1. Clone the repo, copy `.env.example` to `.env`, fill in values.
-2. Start backend + database:
-  `docker compose up -d`
+2. Start backend + database:    `docker compose up -d`
 
-3. Run database migrations (first time only):
-      `cd backend`     `alembic upgrade head`
+3. Run database migrations (first time only):    `cd backend`     `alembic upgrade head`
 
-4. Seed default categories:
- `python ../database/seed_categories.py`
+4. Seed default categories:    `python ../database/seed_categories.py`
 
-5. Run the Flutter app:
-
-`cd mobile`    `flutter pub get`    `flutter run`
+5. Run the Flutter app:    `cd mobile`    `flutter pub get`    `flutter run`
 
 
 Update `ApiClient.baseUrl` in `mobile/lib/core/network/api_client.dart` to point to your
 backend's reachable address (local IP for same-Wi-Fi testing, or a tunnel like **ngrok** for
 internet access).
 
-6. (Optional) Start Airflow to see the analytics pipeline:  `docker compose up -d airflow`
+6. (Optional) Start Airflow to see the analytics pipeline:    `docker compose up -d airflow`
 
 
 Visit `http://localhost:8080` (login: admin/admin), trigger the `finance_analytics_daily` DAG.
@@ -135,7 +142,9 @@ Visit `http://localhost:8080` (login: admin/admin), trigger the `finance_analyti
 - Transaction list filters cover search + income/expense type; category-specific filter chips and date-range filtering are not yet implemented
 - Backend currently exposed via ngrok tunnel for development/demo purposes, not a production deployment
 
+## Download
 
+[Download APK](./assets/apk/VeLO.apkk)
 
 
 ---
