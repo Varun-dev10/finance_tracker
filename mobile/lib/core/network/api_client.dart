@@ -8,14 +8,18 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ApiClient {
   // Change this if PC's IP changes (e.g. different Wi-Fi network).
-  static const String baseUrl = 'http://192.168.29.103:8000';
+  // changed to ngrok public access
+  static const String baseUrl = 'https://chute-frame-ultimate.ngrok-free.dev';
 
   static const _storage = FlutterSecureStorage();
 
   late final Dio dio;
 
   ApiClient() {
-    dio = Dio(BaseOptions(baseUrl: baseUrl));
+    dio = Dio(BaseOptions(
+      baseUrl: baseUrl,
+      headers: {'ngrok-skip-browser-warning': 'true'},
+    ));
 
     // This runs before every single request - automatically attaches
     // the saved JWT token, so we don't have to add it manually every time.
