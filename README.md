@@ -144,7 +144,7 @@ Visit `http://localhost:8080` (login: admin/admin), trigger the `finance_analyti
 
 ## Download
 
-[Download APK](assets/apk/VeLO.apkk)
+[Download APK](./assets/apk/VeLO.apk)
 
 
 ---
