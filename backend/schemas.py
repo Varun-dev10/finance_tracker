@@ -37,7 +37,7 @@ class TransactionCreate(BaseModel):
 
 # TransactionResponse = what we send back (includes generated id)
 
-class TransactionResponse(BaseModel):  
+class TransactionResponse(BaseModel):
     id: uuid.UUID
     category_id: uuid.UUID
     amount: Decimal
@@ -47,3 +47,20 @@ class TransactionResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+# Budget schemas
+# BudgetCreate is what the Flutter app sends to the server (Amount and Month)
+class BudgetCreate(BaseModel):
+    amount: Decimal
+    month: datetime.date
+
+# BudgetResponse is what the server sends back to the app (adds the unique ID)
+class BudgetResponse(BaseModel):
+    id: uuid.UUID
+    amount: Decimal
+    month: datetime.date
+
+    class Config:
+        from_attributes = True
+
+

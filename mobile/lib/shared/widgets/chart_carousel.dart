@@ -12,7 +12,11 @@ class ChartCarousel extends StatefulWidget {
   final List<Map<String, dynamic>> monthlyData;
   final List<Map<String, dynamic>> transactions;
 
-  const ChartCarousel({super.key, required this.monthlyData, required this.transactions});
+  const ChartCarousel({
+    super.key,
+    required this.monthlyData,
+    required this.transactions,
+  });
 
   @override
   State<ChartCarousel> createState() => _ChartCarouselState();
@@ -21,11 +25,19 @@ class ChartCarousel extends StatefulWidget {
 class _ChartCarouselState extends State<ChartCarousel> {
   final _pageController = PageController();
   int _currentPage = 0;
-
+  final _titles = ['Monthly overview', 'Spending trend'];
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            _titles[_currentPage],
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ),
+        const SizedBox(height: 8),
         SizedBox(
           height: 280, // fits the chart card + legend/labels
           child: PageView(
@@ -49,7 +61,9 @@ class _ChartCarouselState extends State<ChartCarousel> {
               width: isActive ? 20 : 6,
               height: 6,
               decoration: BoxDecoration(
-                color: isActive ? AppColors.primaryPurple : AppColors.lightPurple,
+                color: isActive
+                    ? AppColors.primaryPurple
+                    : AppColors.lightPurple,
                 borderRadius: BorderRadius.circular(3),
               ),
             );

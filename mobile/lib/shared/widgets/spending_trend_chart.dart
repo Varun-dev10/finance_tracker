@@ -25,7 +25,10 @@ class SpendingTrendChart extends StatelessWidget {
     if (dailyTotals.isEmpty) {
       return const Padding(
         padding: EdgeInsets.symmetric(vertical: 20),
-        child: Text('No spending data yet', style: TextStyle(color: AppColors.textSecondary)),
+        child: Text(
+          'No spending data yet',
+          style: TextStyle(color: AppColors.textSecondary),
+        ),
       );
     }
 
@@ -41,7 +44,10 @@ class SpendingTrendChart extends StatelessWidget {
       return FlSpot(index.toDouble(), dailyTotals[date]!);
     }).toList();
 
-    final maxY = dailyTotals.values.fold<double>(0, (max, v) => v > max ? v : max);
+    final maxY = dailyTotals.values.fold<double>(
+      0,
+      (max, v) => v > max ? v : max,
+    );
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -59,23 +65,53 @@ class SpendingTrendChart extends StatelessWidget {
             gridData: const FlGridData(show: false),
             borderData: FlBorderData(show: false),
             titlesData: FlTitlesData(
-              leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-              rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-              topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+              leftTitles: const AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
+              rightTitles: const AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
+              topTitles: const AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
               bottomTitles: AxisTitles(
                 sideTitles: SideTitles(
                   showTitles: true,
-                  interval: (recentDates.length / 4).ceilToDouble().clamp(1, double.infinity),
+                  interval: (recentDates.length / 4).ceilToDouble().clamp(
+                    1,
+                    double.infinity,
+                  ),
                   getTitlesWidget: (value, meta) {
                     final index = value.toInt();
-                    if (index < 0 || index >= recentDates.length) return const SizedBox();
+                    if (index < 0 || index >= recentDates.length)
+                      return const SizedBox();
                     final parts = recentDates[index].split('-');
                     return Padding(
                       padding: const EdgeInsets.only(top: 8),
-                      child: Text('${parts[2]}/${parts[1]}', style: Theme.of(context).textTheme.bodySmall),
+                      child: Text(
+                        '${parts[2]}/${parts[1]}',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
                     );
                   },
                 ),
+              ),
+            ),
+
+            // both tooltips now use solid purple background with bold white text,
+            // so the amount is clearly readable when held
+            lineTouchData: LineTouchData(
+              touchTooltipData: LineTouchTooltipData(
+                getTooltipColor: (spot) => AppColors.primaryPurple,
+                getTooltipItems: (spots) => spots.map((spot) {
+                  return LineTooltipItem(
+                    '₹${spot.y.toStringAsFixed(0)}',
+                    const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  );
+                }).toList(),
               ),
             ),
             lineBarsData: [

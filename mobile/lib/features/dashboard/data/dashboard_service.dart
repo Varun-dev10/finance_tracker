@@ -23,4 +23,11 @@ class DashboardService {
     final response = await _apiClient.dio.get('/transactions');
     return List<Map<String, dynamic>>.from(response.data);
   }
+
+  Future<Map<String, dynamic>> getBudget() async {
+    final now = DateTime.now();
+    final monthStr = '${now.year}-${now.month.toString().padLeft(2, '0')}-01';
+    final response = await _apiClient.dio.get('/budget', queryParameters: {'month': monthStr});
+    return response.data;
+  }
 }

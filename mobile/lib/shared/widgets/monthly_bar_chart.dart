@@ -17,7 +17,10 @@ class MonthlyBarChart extends StatelessWidget {
     if (data.isEmpty) {
       return const Padding(
         padding: EdgeInsets.symmetric(vertical: 20),
-        child: Text('No data yet', style: TextStyle(color: AppColors.textSecondary)),
+        child: Text(
+          'No data yet',
+          style: TextStyle(color: AppColors.textSecondary),
+        ),
       );
     }
 
@@ -53,24 +56,52 @@ class MonthlyBarChart extends StatelessWidget {
                 gridData: const FlGridData(show: false),
                 borderData: FlBorderData(show: false),
                 titlesData: FlTitlesData(
-                  leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  leftTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  rightTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  topTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
                   bottomTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
                       getTitlesWidget: (value, meta) {
                         final index = value.toInt();
-                        if (index < 0 || index >= months.length) return const SizedBox();
+                        if (index < 0 || index >= months.length)
+                          return const SizedBox();
                         final monthLabel = _formatMonth(months[index]);
                         return Padding(
                           padding: const EdgeInsets.only(top: 8),
-                          child: Text(monthLabel, style: Theme.of(context).textTheme.bodySmall),
+                          child: Text(
+                            monthLabel,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
                         );
                       },
                     ),
                   ),
                 ),
+
+                // both tooltips now use solid purple background with bold white text,
+                // so the amount is clearly readable when held
+                barTouchData: BarTouchData(
+                  touchTooltipData: BarTouchTooltipData(
+                    getTooltipColor: (group) => AppColors.primaryPurple,
+                    getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                      return BarTooltipItem(
+                        '₹${rod.toY.toStringAsFixed(0)}',
+                        const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
                 barGroups: months.asMap().entries.map((entry) {
                   final index = entry.key;
                   final month = entry.value;
@@ -117,15 +148,35 @@ class MonthlyBarChart extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(width: 10, height: 10, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
+        Container(
+          width: 10,
+          height: 10,
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+        ),
         const SizedBox(width: 6),
-        Text(label, style: const TextStyle(fontSize: 12, color: AppColors.textSecondary)),
+        Text(
+          label,
+          style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+        ),
       ],
     );
   }
 
   String _formatMonth(String yyyymm) {
-    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
     final parts = yyyymm.split('-');
     return months[int.parse(parts[1]) - 1];
   }

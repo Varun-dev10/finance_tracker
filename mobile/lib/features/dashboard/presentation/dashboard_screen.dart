@@ -11,7 +11,6 @@ import '../../../core/network/category_service.dart';
 import '../../transactions/data/transaction_service.dart';
 import '../data/dashboard_service.dart';
 import '../../../shared/widgets/category_donut_chart.dart';
-import '../../../shared/widgets/monthly_bar_chart.dart';
 import '../../../shared/widgets/chart_carousel.dart';
 
 
@@ -46,6 +45,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   double _balance = 0;
   double _income = 0;
   double _expenses = 0;
+
+  double _budgetAmount = 0;
   List _recentTransactions = [];
 
   @override
@@ -65,6 +66,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       final categoryBreakdown = await _dashboardService.getCategoryBreakdown();
       final monthlyData = await _dashboardService.getMonthly();
       final rawTxResponse = await _dashboardService.getRawTransactions();
+      final budget = await _dashboardService.getBudget();
 
       final categories = await _categoryService.getCategories();
       final categoryMap = {
@@ -83,6 +85,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         _isLoading = false;
         _monthlyData = monthlyData;
         _rawTransactions = rawTxResponse;
+        _budgetAmount = double.parse(budget['amount'].toString());
       });
     } catch (e) {
       setState(() {
@@ -90,6 +93,43 @@ class _DashboardScreenState extends State<DashboardScreen> {
         _isLoading = false;
       });
     }
+  }
+
+  // Small inline hint showing how spending compares to the budget.
+  Widget _buildBudgetHint() {
+    final remaining = _budgetAmount - _expenses;
+    final isOverBudget = remaining < 0;
+    final percentUsed = (_expenses / _budgetAmount * 100).clamp(0, 999).toStringAsFixed(0);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color: isOverBudget ? AppColors.error.withValues(alpha: 0.1) : AppColors.success.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            isOverBudget ? Icons.trending_up : Icons.check_circle_outline,
+            color: isOverBudget ? AppColors.error : AppColors.success,
+            size: 18,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              isOverBudget
+                  ? 'You\'ve gone ₹${remaining.abs().toStringAsFixed(0)} over your budget'
+                  : 'You\'ve used $percentUsed% of your budget this month',
+              style: TextStyle(
+                fontSize: 13,
+                color: isOverBudget ? AppColors.error : AppColors.success,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
   String _getGreeting() {
     final hour = DateTime.now().hour;
@@ -143,6 +183,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Text('Spending by category', style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 12),
                 CategoryDonutChart(data: _categoryBreakdown),
+
+                if (_budgetAmount > 0) ...[
+                  const SizedBox(height: 16),
+                  _buildBudgetHint(),
+                ],
+
                 const SizedBox(height: 28),
 
                 Text('Overview', style: Theme.of(context).textTheme.titleMedium),
