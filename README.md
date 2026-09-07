@@ -1,4 +1,4 @@
-# Finance Tracker
+# VeLO - Finance Tracker
 
 A full-stack personal finance tracking application built to demonstrate end-to-end
 engineering skills: mobile development, REST API design, authentication, relational
