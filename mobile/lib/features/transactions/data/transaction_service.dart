@@ -35,6 +35,23 @@ class TransactionService {
     });
   }
 
+  // same shape as createTransaction, just calls PUT with the transaction's id in the URL instead of POST
+  Future<void> updateTransaction({
+    required String id,
+    required String categoryId,
+    required double amount,
+    required String type,
+    String? description,
+    required DateTime transactionDate,
+  }) async {
+    await _apiClient.dio.put('/transactions/$id', data: {
+      'category_id': categoryId,
+      'amount': amount,
+      'type': type,
+      'description': description,
+      'transaction_date': transactionDate.toIso8601String().split('T')[0],
+    });
+  }
   Future<void> deleteTransaction(String id) async {
     await _apiClient.dio.delete('/transactions/$id');
   }

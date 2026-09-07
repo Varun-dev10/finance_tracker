@@ -6,9 +6,12 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/network/category_service.dart';
 import '../data/transaction_service.dart';
+import '../models/transaction_model.dart';
 
 class AddTransactionScreen extends StatefulWidget {
-  const AddTransactionScreen({super.key});
+  final TransactionModel? existingTransaction; // null = adding new, non-null = editing
+
+  const AddTransactionScreen({super.key, this.existingTransaction});
 
   @override
   State<AddTransactionScreen> createState() => _AddTransactionScreenState();
@@ -29,11 +32,20 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   String? _errorMessage;
 
   @override
+  @override
   void initState() {
     super.initState();
+    // If editing, pre-fill the form with the existing transaction's data
+    if (widget.existingTransaction != null) {
+      final tx = widget.existingTransaction!;
+      _amountController.text = tx.amount.toString();
+      _descriptionController.text = tx.description ?? '';
+      _type = tx.type;
+      _selectedDate = tx.transactionDate;
+      _selectedCategoryId = tx.categoryId;
+    }
     _loadCategories();
   }
-
   Future<void> _loadCategories() async {
     final categories = await _categoryService.getCategories();
     setState(() {
@@ -79,15 +91,28 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       _isSaving = true;
       _errorMessage = null;
     });
-
+//one screen, two modes > existingTransaction == null means "creating,"
+// otherwise "editing" > avoids duplicating the entire form in a second file (add_transaction_screen.dart)
     try {
-      await _transactionService.createTransaction(
-        categoryId: _selectedCategoryId!,
-        amount: amount,
-        type: _type,
-        description: _descriptionController.text.trim(),
-        transactionDate: _selectedDate,
-      );
+      if (widget.existingTransaction != null) {
+        // Editing - call update instead of create
+        await _transactionService.updateTransaction(
+          id: widget.existingTransaction!.id,
+          categoryId: _selectedCategoryId!,
+          amount: amount,
+          type: _type,
+          description: _descriptionController.text.trim(),
+          transactionDate: _selectedDate,
+        );
+      } else {
+        await _transactionService.createTransaction(
+          categoryId: _selectedCategoryId!,
+          amount: amount,
+          type: _type,
+          description: _descriptionController.text.trim(),
+          transactionDate: _selectedDate,
+        );
+      }
       if (mounted) Navigator.of(context).pop();
     } catch (e) {
       setState(() {
@@ -96,7 +121,6 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       });
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,7 +128,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.background,
         elevation: 0,
-        title: const Text('Add Transaction'),
+        title: Text(widget.existingTransaction != null ? 'Edit Transaction' : 'Add Transaction'),
       ),
       body: SafeArea(
         child: Padding(

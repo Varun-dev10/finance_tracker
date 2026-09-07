@@ -71,6 +71,7 @@ class DashboardScreen extends StatelessWidget {
                 isIncome: false,
                 icon: CategoryIcons.getIcon('Food'),
                 iconColor: CategoryIcons.getColor('Food'),
+                date: DateTime.now(),
               ),
               TransactionRow(
                 categoryName: 'Salary',
@@ -79,6 +80,7 @@ class DashboardScreen extends StatelessWidget {
                 isIncome: true,
                 icon: CategoryIcons.getIcon('Salary'),
                 iconColor: CategoryIcons.getColor('Salary'),
+                date: DateTime.now(),
               ),
               TransactionRow(
                 categoryName: 'Transport',
@@ -87,6 +89,7 @@ class DashboardScreen extends StatelessWidget {
                 isIncome: false,
                 icon: CategoryIcons.getIcon('Transport'),
                 iconColor: CategoryIcons.getColor('Transport'),
+                date: DateTime.now(),
               ),
             ],
           ),
