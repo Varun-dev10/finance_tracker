@@ -1,7 +1,7 @@
+import 'package:finance_tracker/features/auth/presentation/auth_gate.dart';
 import 'package:flutter/material.dart';
 import 'core/theme/app_theme.dart';
-import 'features/dashboard/presentation/dashboard_screen.dart';
-import 'shared/widgets/main_shell.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +15,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Finance Tracker',
       theme: AppTheme.lightTheme,
-      home: const MainShell(),
+      debugShowCheckedModeBanner: false,
+      home: const AuthGate(),
     );
   }
 }

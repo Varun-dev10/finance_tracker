@@ -10,7 +10,13 @@ import '../../../core/constants/category_icons.dart';
 // For now uses hardcoded sample data. Real API data comes in a later phase.
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
-
+  // Picks a greeting based on the current time of day.
+  String _getGreeting() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) return 'Good morning, Varun';
+    if (hour < 17) return 'Good afternoon, Varun';
+    return 'Good evening, Varun';
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +29,7 @@ class DashboardScreen extends StatelessWidget {
             children: [
               // Simple greeting instead of a boxy default app bar
               Text(
-                'Good evening, Varun',
+                _getGreeting(),
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 20),
