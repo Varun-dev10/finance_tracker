@@ -917,4 +917,5 @@
 /mobile/.flutter-plugins-dependencies
 /login.json
 /tx.json
-
+__pycache__/
+*.pyc
