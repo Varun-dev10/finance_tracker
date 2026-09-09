@@ -12,6 +12,7 @@ import '../../transactions/data/transaction_service.dart';
 import '../data/dashboard_service.dart';
 import '../../../shared/widgets/category_donut_chart.dart';
 import '../../../shared/widgets/chart_carousel.dart';
+import '../../../core/network/api_client.dart';
 
 
 // The main screen of the app - shows balance, income/expense, and recent transactions.
@@ -41,7 +42,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   bool _isLoading = true;
   String? _errorMessage;
-
+  String _userName = '';  // user greetings name comes from the backend
   double _balance = 0;
   double _income = 0;
   double _expenses = 0;
@@ -73,6 +74,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
         for (var c in categories) c['id'] as String: c['name'] as String
       };
       final transactions = await _transactionService.getTransactions(categoryMap);
+      //  A fetch for the current user
+      final apiClient = ApiClient();
+      final meResponse = await apiClient.dio.get('/auth/me');
 
       transactions.sort((a, b) => b.transactionDate.compareTo(a.transactionDate));
 
@@ -86,6 +90,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         _monthlyData = monthlyData;
         _rawTransactions = rawTxResponse;
         _budgetAmount = double.parse(budget['amount'].toString());
+        _userName = meResponse.data['display_name'] ?? 'there';  // default to 'there' if no name is returned
       });
     } catch (e) {
       setState(() {
@@ -133,9 +138,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
   String _getGreeting() {
     final hour = DateTime.now().hour;
-    if (hour < 12) return 'Good morning, Varun';
-    if (hour < 17) return 'Good afternoon, Varun';
-    return 'Good evening, Varun';
+    String timeGreeting;
+    if (hour < 12) {
+      timeGreeting = 'Good morning';
+    } else if (hour < 17) {
+      timeGreeting = 'Good afternoon';
+    } else {
+      timeGreeting = 'Good evening';
+    }
+    return '$timeGreeting, $_userName';
   }
 
   @override
