@@ -919,3 +919,5 @@
 /tx.json
 __pycache__/
 *.pyc
+claude.md
+assets/claude.md
