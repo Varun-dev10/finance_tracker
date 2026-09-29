@@ -21,6 +21,8 @@ services:
     build: ./backend
     container_name: finance_tracker_backend
     restart: unless-stopped
+    volumes:
+      - ./backend:/app
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}

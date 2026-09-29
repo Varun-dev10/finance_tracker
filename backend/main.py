@@ -52,7 +52,7 @@ def register(user_data: UserRegister, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_user)
 
-    return new_user
+    return new_user    # return the new user object through the response_model schema (UserResponse)
 
 @app.post("/auth/login", response_model=Token)
 def login(credentials: UserLogin, db: Session = Depends(get_db)):

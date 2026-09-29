@@ -2,6 +2,11 @@ from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from jose import jwt
 import os
+from fastapi import Depends, HTTPException
+from fastapi.security import OAuth2PasswordBearer
+from sqlalchemy.orm import Session
+from database import get_db
+from models import User
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -26,14 +31,10 @@ def create_access_token(data: dict):
 def decode_access_token(token: str):
     return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
 
+
+
 ## Protected route dependency part
 # reads token from request > decodes it > finds that user in DB > returns this is who's making the request
-
-from fastapi import Depends, HTTPException
-from fastapi.security import OAuth2PasswordBearer
-from sqlalchemy.orm import Session
-from database import get_db
-from models import User
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
