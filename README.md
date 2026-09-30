@@ -145,7 +145,7 @@ Visit `http://localhost:8080` (login: admin/admin), trigger the `finance_analyti
 
 7. (Optional) Manual start Airflow to extract data to **finance_analytics.duckdb** :    `docker exec -it finance_tracker_airflow python /opt/airflow/analytics/extract_to_duckdb.py`
 
-8. View all Extracted tables by Airflow  **finance_analytics.duckdb** into DuckDB file inside terminal :    `docker exec -it finance_tracker_airflow python /opt/airflow/analytics/extract_to_duckdb.py` 
+8. View all Extracted tables by Airflow  **finance_analytics.duckdb** into DuckDB file inside terminal :    `docker exec -it finance_tracker_airflow python /opt/airflow/analytics/query_test.py` 
 
 
 ## Known limitations
