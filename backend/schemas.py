@@ -1,5 +1,7 @@
 import uuid
 from pydantic import BaseModel, EmailStr
+import datetime
+from decimal import Decimal
 
 class UserRegister(BaseModel):
     email: EmailStr
@@ -24,8 +26,7 @@ class Token(BaseModel):
 
 
 
-import datetime
-from decimal import Decimal
+
 # TransactionCreate = what client sends when adding a transaction
 
 class TransactionCreate(BaseModel):
