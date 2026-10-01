@@ -10,11 +10,8 @@ class ApiClient {
   // Change this if PC's IP changes (e.g. different Wi-Fi network).
   // changed to ngrok public access
   static const String baseUrl = 'https://chute-frame-ultimate.ngrok-free.dev';
-
   static const _storage = FlutterSecureStorage();
-
   late final Dio dio;
-
   ApiClient() {
     dio = Dio(BaseOptions(
       baseUrl: baseUrl,
@@ -23,7 +20,6 @@ class ApiClient {
 
     // This runs before every single request - automatically attaches
     // the saved JWT token, so we don't have to add it manually every time.
-
 
 
 // Interceptor = code that runs automatically on every API call
