@@ -24,7 +24,7 @@ monthly budget with visual progress tracking.
 graph TD
     A[Flutter Android App] -->|REST / JSON| B[FastAPI Backend]
     B --> C[(PostgreSQL)]
-    D[Airflow DAG] -->|extracts data| C
+    C --> |extracts data| D[Airflow DAG] 
     D -->|loads into| E[(DuckDB)]
     E -->|analytics available for| B
 ```
